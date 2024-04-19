@@ -33,8 +33,10 @@ jobs:
       - docker/check
       - docker/build: #build the image
           image: kiblykat/education-repository
+          tag: v1.0.1
       - docker/push: #pushes the image to the specified account in the environment variables
           image: kiblykat/education-repository
+          tag: v1.0.1
 # workflows - defines what sequence will the jobs run
 workflows:
   simple_workflow: # workflow name
