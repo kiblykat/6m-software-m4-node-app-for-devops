@@ -31,7 +31,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - docker/check
-      - docker/build #build the image
+      - docker/build: #build the image
           image: kiblykat/education-repository
       - docker/push: #pushes the image to the specified account in the environment variables
           image: kiblykat/education-repository
