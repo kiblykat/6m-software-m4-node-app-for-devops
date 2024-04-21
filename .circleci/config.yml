@@ -25,7 +25,7 @@ jobs:
       - run: |
           echo "Running tests..."
           npm run test
-  publish: #known as the build and push
+  publish: #also known as the build and push
     executor: docker/docker #define the execution environment in which the steps of a job will run
     steps:
       - setup_remote_docker
