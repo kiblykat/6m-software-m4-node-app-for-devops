@@ -31,7 +31,7 @@ jobs:
     steps:
       - run: |
           echo "build and push job..."
-          docker build -t edisonzsq/education-space:latest .
+          docker build -t kiblykat/education-space:latest .
 
 # workflows - defines what sequence will the jobs run
 workflows:
