@@ -28,7 +28,7 @@ jobs:
   publish: #also known as the build and push
     executor: docker/docker #define the execution environment in which the steps of a job will run
     steps:
-      - setup_remote_docker
+      - setup_remote_docker #bypasses requirement to input Dockerhub username and pw (vs using docker image like above)
       - checkout
       - docker/check
       - docker/build: #build the image
