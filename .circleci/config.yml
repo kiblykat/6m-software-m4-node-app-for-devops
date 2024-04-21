@@ -25,13 +25,18 @@ jobs:
       - run: |
           echo "Running tests..."
           npm run test
-  build-and-push:
-    docker:
-      - image: cimg/node:16.10
+  publish: #also known as the build and push
+    executor: docker/docker #define the execution environment in which the steps of a job will run
     steps:
-      - run: |
-          echo "build and push job..."
-          docker build -t kiblykat/education-space:latest .
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build: #build the image
+          image: kiblykat/education-repository
+          tag: v1.0.1
+      - docker/push: #pushes the image to the specified account in the environment variables
+          image: kiblykat/education-repository
+          tag: v1.0.1
 
 # workflows - defines what sequence will the jobs run
 workflows:
@@ -41,6 +46,6 @@ workflows:
       - test:
           requires:
             - build
-      - build-and-push:
+      - publish:
           requires:
             - test
