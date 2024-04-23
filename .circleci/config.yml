@@ -38,7 +38,7 @@ jobs:
           image: kiblykat/education-repository
           tag: v1.0.1
 
-# workflows - defines in what sequence will the jobs run
+# workflows - defines what sequence the jobs will run
 workflows:
   simple_workflow: # workflow name
     jobs:
