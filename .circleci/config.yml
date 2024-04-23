@@ -42,18 +42,10 @@ jobs:
 workflows:
   simple_workflow: # workflow name
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - main
+      - build
       - test:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - main
       - publish:
           requires:
             - test
