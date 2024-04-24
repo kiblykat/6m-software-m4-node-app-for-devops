@@ -3,6 +3,8 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4
+  # heroku: circleci/heroku@2.0.0
+  snyk: snyk/snyk@1.5.0
 # jobs - set of instructions / functions
 jobs:
   build: #job name
@@ -37,27 +39,46 @@ jobs:
       - docker/push: #pushes the image to the specified account in the environment variables
           image: kiblykat/education-repository
           tag: v1.0.1
+  # deploy: ...
 
-# workflows - defines what sequence will the jobs run
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment: #environment allows us to create an environmentt for the job and allows us to create custom environment variables
+      IMAGE_NAME: kiblykat/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run: docker build -t $IMAGE_NAME . #$IMAGE_NAME gets the value from the environent we created above
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME
+# workflows - defines what sequence the jobs will run
 workflows:
   simple_workflow: # workflow name
     jobs:
       - build:
+          # additional filters
           filters:
             branches:
-              only:
-                - main
+              only: main #build job only runs when code changes are pushed to the main branch
       - test:
           requires:
             - build
           filters:
             branches:
-              only:
-                - main
+              only: main
       - publish:
-          requires:
+          requires: # runs concurrently with scan, after build
             - test
           filters:
             branches:
               only:
                 - release
+      # The scan job:
+      - scan:
+          requires: # runs concurrently with test, after build
+            - build
+          filters:
+            branches:
+              only: main
